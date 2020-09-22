@@ -1,0 +1,604 @@
+VERSION 5.00
+Object = "{F7DEA2C9-BA8F-446E-A292-B4840F3BD661}#1.0#0"; "mscemenubar.dll"
+Object = "{F7346713-70C5-11D1-9AC9-00C04FAD5AEC}#1.0#0"; "msceimage.dll"
+Begin VB.Form frmSpace 
+   Appearance      =   0  'Flat
+   BackColor       =   &H00000000&
+   Caption         =   "Space Shooter"
+   ClientHeight    =   4380
+   ClientLeft      =   60
+   ClientTop       =   840
+   ClientWidth     =   3615
+   ForeColor       =   &H80000008&
+   ScaleHeight     =   4380
+   ScaleWidth      =   3615
+   ShowOK          =   -1  'True
+   Begin MenuBarLib.MenuBar MenuBar 
+      Left            =   0
+      Top             =   4080
+      _cx             =   3625
+      _cy             =   661
+      Enabled         =   -1  'True
+      NewButton       =   0   'False
+   End
+   Begin VBCE.Timer Timer 
+      Left            =   2640
+      Top             =   4080
+      _cx             =   847
+      _cy             =   847
+      Enabled         =   -1  'True
+      Interval        =   1000
+   End
+   Begin VBCE.Label lblReady 
+      Height          =   375
+      Left            =   600
+      TabIndex        =   7
+      Top             =   480
+      Width           =   2205
+      _cx             =   3889
+      _cy             =   661
+      AutoSize        =   0   'False
+      BackColor       =   14737632
+      BackStyle       =   1
+      BorderStyle     =   0
+      Caption         =   "Get ready in: "
+      Enabled         =   -1  'True
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   15.75
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   -2147483640
+      Alignment       =   0
+      UseMnemonic     =   -1  'True
+      WordWrap        =   0   'False
+   End
+   Begin VBCE.Timer bulletFire 
+      Left            =   3120
+      Top             =   4080
+      _cx             =   847
+      _cy             =   847
+      Enabled         =   0   'False
+      Interval        =   20
+   End
+   Begin VBCE.Label lblpHealth 
+      Height          =   195
+      Left            =   120
+      TabIndex        =   6
+      Top             =   3620
+      Visible         =   0   'False
+      Width           =   1575
+      _cx             =   2778
+      _cy             =   344
+      AutoSize        =   0   'False
+      BackColor       =   16777215
+      BackStyle       =   1
+      BorderStyle     =   0
+      Caption         =   "Your Health: "
+      Enabled         =   -1  'True
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   -2147483640
+      Alignment       =   0
+      UseMnemonic     =   -1  'True
+      WordWrap        =   0   'False
+   End
+   Begin IMAGECtl.ImageCtl Shooter 
+      Height          =   375
+      Left            =   1440
+      TabIndex        =   5
+      Top             =   3120
+      Width           =   375
+      _cx             =   661
+      _cy             =   661
+      Picture         =   ""
+      Stretch         =   -1  'True
+   End
+   Begin IMAGECtl.ImageCtl Alien 
+      Height          =   255
+      Left            =   1320
+      TabIndex        =   4
+      Top             =   0
+      Width           =   375
+      _cx             =   661
+      _cy             =   450
+      Picture         =   ""
+      Stretch         =   -1  'True
+   End
+   Begin IMAGECtl.ImageCtl Bullet2 
+      Height          =   200
+      Left            =   3480
+      TabIndex        =   3
+      Top             =   1440
+      Visible         =   0   'False
+      Width           =   45
+      _cx             =   79
+      _cy             =   353
+      Picture         =   ""
+      Stretch         =   -1  'True
+   End
+   Begin IMAGECtl.ImageCtl Bullet1 
+      Height          =   375
+      Left            =   3480
+      TabIndex        =   2
+      Top             =   1920
+      Visible         =   0   'False
+      Width           =   45
+      _cx             =   79
+      _cy             =   661
+      Picture         =   ""
+      Stretch         =   -1  'True
+   End
+   Begin IMAGECtl.ImageCtl Missle 
+      Height          =   375
+      Left            =   3360
+      TabIndex        =   1
+      Top             =   2400
+      Visible         =   0   'False
+      Width           =   90
+      _cx             =   159
+      _cy             =   661
+      Picture         =   ""
+      Stretch         =   -1  'True
+   End
+   Begin VBCE.Label lblcHealth 
+      Height          =   195
+      Left            =   1800
+      TabIndex        =   0
+      Top             =   3620
+      Visible         =   0   'False
+      Width           =   1695
+      _cx             =   2990
+      _cy             =   344
+      AutoSize        =   0   'False
+      BackColor       =   16777215
+      BackStyle       =   1
+      BorderStyle     =   0
+      Caption         =   "Computer Health: "
+      Enabled         =   -1  'True
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   -2147483640
+      Alignment       =   0
+      UseMnemonic     =   -1  'True
+      WordWrap        =   0   'False
+   End
+End
+Attribute VB_Name = "frmSpace"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = False
+Option Explicit
+Dim Sound As Long           'These are used to play the wavs
+Dim SND_FILENAME As Long
+Dim cMAXHEALTH As Integer   'Computer's MAX health
+Dim g_Running As Boolean    'Game Running Flag
+Dim countDown As Byte       'Count down timer
+Dim pHealth As Integer      'Player's health
+Dim cHealth As Integer      'Computer's health
+Dim pFired As Boolean       'Fired flag
+Dim mCount As Byte          'Missles count
+Dim cFired As Integer       'Computer's fired count
+Dim cMove As Boolean       'Computer's location to move
+Dim cDir As Boolean      'Computer's DOT (Direction of Travel)only left and right
+Dim pDead As Boolean     'Checks to see if player is dead... if you didn't have this
+                         'you could move your explosion at the end
+
+Public Sub bulletFire_Timer()
+    'This code moves the bullet
+    If pFired = True Then       'So it doesn't reset bullet on accident
+        If Bullet1.Visible = True Then
+            Bullet1.Top = Bullet1.Top - 200
+            Call Collide        'Checks for collision
+        
+            'This code checks to see if bullet is beyond form
+            If Bullet1.Top < Me.Top - Bullet1.Height Then
+                Bullet1.Left = Shooter.Left + Shooter.Width / 2
+                Bullet1.Top = Shooter.Top + 1
+                Bullet1.Visible = False
+                pFired = False
+            End If
+        End If
+        If Missle.Visible = True Then
+            Missle.Top = Missle.Top - 200
+            Call Collide
+            
+            'Code checks to see if missle went past form
+            If Missle.Top < Me.Top - Missle.Height Then
+                Missle.Left = Shooter.Left + Shooter.Width / 2
+                Missle.Top = Shooter.Top + 1
+                Missle.Visible = False
+                pFired = False
+            End If
+        End If
+    End If
+    
+    If cFired = True Then
+        Bullet2.Top = Bullet2.Top + 200
+        Call Collide
+        
+        If Bullet2.Top > Me.Height - Bullet2.Height - 10 Then
+            Bullet2.Visible = False
+            cFired = False
+        End If
+    End If
+End Sub
+
+Private Sub Form_Click()
+    Call pauseGame
+    MsgBox "Game is paused", , "Paused"
+    Call unpauseGame
+End Sub
+
+Private Sub Form_KeyDown(KeyCode As Integer, Shift As Integer)
+    'A note for iPAQ 1940 users 193 through 197 are the other hardware buttons
+    If pDead = False Then
+        If KeyCode = vbKeyLeft Then             'if left pad is pushed
+            If Shooter.Left < Me.Left Then
+                Shooter.Left = Me.Left + 5        'checks to see if ship is beyond form
+            Else
+                Shooter.Left = Shooter.Left - 135 'else moves it
+                If Shooter.Left < Me.Left Then
+                    Shooter.Left = Me.Left + 5    'checks it again (no cheating now)
+                End If
+            End If
+        End If
+        
+        If KeyCode = vbKeyRight Then            'if right pad is pushed
+            If Shooter.Left > Me.Width - Shooter.Width - 5 Then
+                Shooter.Left = Me.Width - Shooter.Width
+            Else
+                Shooter.Left = Shooter.Left + 135
+                If Shooter.Left > Me.Width + Shooter.Width Then
+                    Shooter.Left = Me.Width - Shooter.Width
+                End If
+            End If
+        End If
+    
+        'This button is used to fire
+        If KeyCode = 134 Then  'couldn't find vb's keycode "help" so
+                               'I found out it's 134 (Start button)
+            If g_Running = True Then
+                If Not pFired Then
+                    Bullet1.Left = Shooter.Left + Shooter.Width / 2
+                    Bullet1.Top = Shooter.Top + 1
+                    pFired = True
+                    Bullet1.Visible = True
+                End If
+            End If
+        End If
+    
+        'This shoots the missle
+        If KeyCode = vbKeyUp Then
+            If g_Running = True Then
+                If Not pFired Then
+                    If mCount >= 1 Then
+                        mCount = mCount - 1
+                        Missle.Left = Shooter.Left + Shooter.Width / 2
+                        Missle.Top = Shooter.Top + 1
+                        pFired = True
+                        Missle.Visible = True
+                    End If
+                End If
+            End If
+        End If
+        
+    End If  'Ends checking of player's death
+End Sub
+
+Private Sub Form_Load()
+    Call InitMenu                   'Initializes the Menu controls
+    strPath = App.Path              'Look in module for strPath declaration
+    If strPath = "\" Then           'So we don't get any location errors
+        strPath = ""
+    End If
+    
+    Shooter.Picture = strPath & "\ship.bmp"    'These are the picture names
+    Alien.Picture = strPath & "\alien.bmp"
+    Bullet1.Picture = strPath & "\bullet.bmp"
+    Bullet2.Picture = strPath & "\bullet2.bmp"
+    Missle.Picture = strPath & "\missle.bmp"
+    
+    frmSpace.SetFocus     'Gives focus to program in order to move unit(ship)
+                          'Reason for this is that Images don't have keydowns
+    
+    g_Running = False     'Tells the computer that the game is not running
+    cMAXHEALTH = 100      'Starts the game out as normal
+    countDown = 5         'Sets count down to the start of the game
+    pHealth = 100         'Sets player's health to max
+    cHealth = cMAXHEALTH  'Sets computer's health to max
+    mCount = 4            'Sets missles count (3 missles)
+End Sub
+
+Private Sub InitMenu()    'This sub Adds all the menus
+    Dim menu
+    
+    Set menu = frmSpace.MenuBar.Controls.AddMenu("File")    'Makes dir File
+    menu.Items.Add , , "Exit"      'These add the items (buttons"
+                                   'Sorry, no intellisense
+                                   '(Stuff that pops up when programming)
+    Set menu = frmSpace.MenuBar.Controls.AddMenu("Game")    'Makes dir Game
+    menu.Items.Add , , "New Game"
+    
+    Set menu = frmSpace.MenuBar.Controls.AddMenu("Help")    'Makes dir Help
+    menu.Items.Add , , "About Space Shooter"
+End Sub
+Private Sub Form_OKClick()
+    App.End      'Obviously closes the program, NOTE: this extension "App" is
+                 'VERY useful!
+End Sub
+
+Private Sub lblcHealth_Click()
+    frmSpace.SetFocus   'If you were to tap these labels without this code,
+                        'the ship will NOT move!! This sets the focus back
+                        'on the form.
+End Sub
+
+Private Sub lblpHealth_Click()
+    frmSpace.SetFocus
+End Sub
+
+Private Sub lblReady_Click()
+    frmSpace.SetFocus       'gives form focus again
+End Sub
+
+Private Sub pauseGame()         'This STOPS everything: moving bullets, alien...
+    g_Running = False
+    Timer.Enabled = False       'No more computer decisions
+    bulletFire.Enabled = False  'No more bullet movement
+End Sub
+
+Private Sub unpauseGame()       'This STARTS everything: moving bullets, shooter...
+    If Timer.Interval = 1000 Then   'This is so we don't get a logic error of events
+        g_Running = False           'Game will screw up if this isn't done.
+    Else
+        g_Running = True
+    End If
+    Timer.Enabled = True        'Starts either count down or Alien
+    bulletFire.Enabled = True   'Allows bullets to be shot again
+End Sub
+Private Sub MenuBar_MenuClick(ByVal Item As MenuBarLib.Item)
+    Dim Response As Integer
+    
+    Select Case Item.Caption
+        'Exit the game
+        Case "Exit"
+            Call pauseGame
+            'Creates a message box asking if you want to quit the game
+            Response = MsgBox("Are you sure you want to quit?", vbYesNo, "Space Shooter")
+            If Response = 6 Then
+                App.End     'Ends Application
+            Else
+                Call unpauseGame
+            End If
+        'Starts a new game
+        Case "New Game"
+            Call pauseGame
+            Response = MsgBox("Do you really want to start a new game?", vbYesNo, "Space Shooter")
+            'The following values restart the game... without them it would just
+            'continue the previous game... we don't want that
+            If Response = 6 Then
+                Response = MsgBox("Do you want a hard computer (no means normal)", vbYesNo, "Difficulty")
+                If Response = 6 Then
+                    cMAXHEALTH = 400
+                    countDown = 5
+                    Timer.Interval = 1000
+                    Timer.Enabled = True
+                    bulletFire.Enabled = False
+                    lblReady.Visible = True
+                    Bullet1.Visible = False
+                    Bullet2.Visible = False
+                    Bullet1.Left = Shooter.Left + Shooter.Width / 2
+                    Bullet1.Top = Shooter.Top + 1
+                    Bullet2.Left = Alien.Left + Alien.Width / 2
+                    Bullet2.Top = Alien.Top + 1
+                    pHealth = 150
+                    cHealth = cMAXHEALTH
+                    mCount = 9
+                    Call newGame
+                Else
+                    cMAXHEALTH = 100
+                    countDown = 5
+                    Timer.Interval = 1000
+                    Timer.Enabled = True
+                    bulletFire.Enabled = False
+                    lblReady.Visible = True
+                    Bullet1.Visible = False
+                    Bullet2.Visible = False
+                    Bullet1.Left = Shooter.Left + Shooter.Width / 2
+                    Bullet1.Top = Shooter.Top + 1
+                    Bullet2.Left = Alien.Left + Alien.Width / 2
+                    Bullet2.Top = Alien.Top + 1
+                    pHealth = 100
+                    cHealth = cMAXHEALTH
+                    mCount = 4
+                    Call newGame
+                End If
+            Else
+                Call unpauseGame    'Un pauses game
+            End If
+            
+        Case "About Space Shooter"
+            Call pauseGame          'Pauses game
+            'The following string is just a summary of why I made this game
+            Dim aboutMsg As String
+            aboutMsg = "I created this game for learning purposes mainly for me."
+            aboutMsg = aboutMsg & " Since I dowload code from others to help me learn "
+            aboutMsg = aboutMsg & "I'm returning the favor. The code is well commented "
+            aboutMsg = aboutMsg & "and I hope it will be for your good.  Have fun and "
+            aboutMsg = aboutMsg & "happy programming!!! :)              "
+            aboutMsg = aboutMsg & "-Daniel Harris-"
+            MsgBox aboutMsg, , "Space Shooter"
+            Call unpauseGame
+    End Select
+End Sub
+
+Private Sub Timer_Timer()
+    If g_Running = False Then   'Checks to see if game is running
+        Call newGame            'Stars the count down
+    Else
+        Call updateComp         'This tells the computer to "fight" back
+    End If
+End Sub
+
+Private Sub updateComp()
+    'This is a very RANDOM computer... I'll try and improve it, but mostly I won't
+    'sine I've learned all I really needed to know.  Guess it's up to you now.
+    Randomize
+    cMove = Int(Rnd * (100 + 150))
+    If cMove >= 100 And cMove <= 125 Then
+        cDir = True     'True means right
+    ElseIf cMove > 125 And cMove <= 150 Then
+        cDir = False    'False means left
+    End If
+    If cDir = True Then
+        Alien.Left = Alien.Left + cMove
+        If Alien.Left > Me.Width - Alien.Width Then
+            Alien.Left = Me.Width - Alien.Width
+        End If
+    ElseIf cDir = False Then
+        Alien.Left = Alien.Left - cMove
+        If Alien.Left < Me.Left Then
+            Alien.Left = Me.Left + 50
+        End If
+    End If
+    
+    If cFired = False Then      'Checks to see if computer already fired
+        cFired = True           'Okay he did...
+        Bullet2.Left = Alien.Left + Alien.Width / 2     'Moves it to the computer
+        Bullet2.Top = Alien.Top + 1
+        Bullet2.Visible = True
+    End If
+End Sub
+Private Sub newGame()
+    g_Running = False     'Tells the computer that the game is not running
+    frmSpace.SetFocus     'Gives focus to program in order to move unit(ship)
+                          'Reason for this is that Images don't have keydowns
+    Shooter.Picture = strPath & "\ship.bmp"    'Makes sure they are correct pictures
+    Alien.Picture = strPath & "\alien.bmp"
+
+    If countDown <= 0 Then
+        'countDown = 5         'Sets count down to the start of the game
+        'pHealth = 100         'Sets player's health to max
+        'cHealth = cMAXHEALTH  'Sets computer's health to max
+        'mCount = 3            'Sets missles count (3 missles)
+        g_Running = True      'Tells computer game is running
+        lblReady.Visible = False    'These commands show/hide labels
+        lblpHealth.Visible = True
+        lblcHealth.Visible = True
+        lblpHealth.Caption = "Your Health: " & pHealth      'player health
+        lblcHealth.Caption = "Computer Health: " & cHealth  'computer health
+        Timer.Interval = 70                           'for faster computer AI
+        bulletFire.Enabled = True                     'Allows you to use weapons
+        frmSpace.SetFocus                      'gives program focus (just in case)
+    End If
+    If countDown > 0 Then
+        pDead = False
+        lblReady.Caption = "Get ready in: " & countDown
+        countDown = countDown - 1
+    End If
+End Sub
+
+Public Sub Collide()
+    'The following top1, top2, ect... are to get picture sizes
+    'for collision VERY CRUCIAL!!
+    
+    top1 = Bullet1.Top
+    bottom1 = Bullet1.Top + Bullet1.Height
+    right1 = Bullet1.Left + Bullet1.Width
+    left1 = Bullet1.Left
+
+    top2 = Bullet2.Top
+    bottom2 = Bullet2.Top + Bullet2.Height
+    right2 = Bullet2.Left + Bullet2.Width
+    left2 = Bullet2.Left
+
+    top3 = Alien.Top
+    bottom3 = Alien.Top + Alien.Height
+    right3 = Alien.Left + Alien.Width
+    left3 = Alien.Left
+
+    top4 = Shooter.Top
+    bottom4 = Shooter.Top + Shooter.Height
+    right4 = Shooter.Left + Shooter.Width
+    left4 = Shooter.Left
+
+    missleTop = Missle.Top
+    missleBottom = Missle.Top + Missle.Height
+    missleRight = Missle.Left + Missle.Width
+    missleLeft = Missle.Left
+    
+    'This checks the player's BULLET against Alien
+    If top1 < top3 And bottom1 > bottom3 And _
+        right1 < right3 And left1 > left3 Then
+        Bullet1.Left = Shooter.Left + Shooter.Width / 2
+        Bullet1.Top = Shooter.Top + 1
+        pFired = False
+        Bullet1.Visible = False
+        cHealth = cHealth - 10
+        lblcHealth.Caption = "Computer Health: " & cHealth
+    End If
+    
+    If top2 > top4 And bottom2 < bottom4 And _
+        right2 < right4 And left2 > left4 Then
+        Bullet2.Left = Alien.Left + Alien.Width / 2
+        Bullet2.Top = Alien.Top + 1
+        cFired = False
+        Bullet2.Visible = False
+        pHealth = pHealth - 10
+        lblpHealth.Caption = "Your Health: " & pHealth
+    End If
+    
+    'This checks the player's MISSLE against Alien
+    If missleTop < top3 And missleBottom > bottom3 And _
+        missleRight < right3 And missleLeft > left3 Then
+        Missle.Left = Shooter.Left + Shooter.Width / 2
+        Missle.Top = Shooter.Top + 1
+        pFired = False
+        Missle.Visible = False
+        cHealth = cHealth - 40
+        lblcHealth.Caption = "Computer Health: " & cHealth
+    End If
+    
+    'MAKE SURE THIS IS ON THE END!!!!!!!
+    'This checks to see if the computer "died" (health 0)
+    If cHealth <= 0 Then
+        g_Running = False
+        Alien.Picture = strPath & "\Boom.bmp"
+        Sound = PlaySound(strPath & "\boom.wav", 0, SND_FILENAME)
+        lblReady.Visible = True
+        lblReady.Caption = "YOU WIN!!"
+        bulletFire.Enabled = False
+        Timer.Enabled = False
+    End If
+    
+    If pHealth <= 0 Then
+        g_Running = False
+        pDead = True
+        Shooter.Picture = strPath & "\Boom.bmp"
+        Sound = PlaySound(strPath & "\boom.wav", 0, SND_FILENAME)
+        lblReady.Visible = True
+        lblReady.Caption = "YOU LOSE!!"
+        bulletFire.Enabled = False
+        Timer.Enabled = False
+    End If
+End Sub
